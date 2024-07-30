@@ -43,21 +43,53 @@ function Projection(point)
 end
 
 function love.load()
-
+    love.window.setMode(800, 600, {resizable = true})
 end
 
+local x = 0
+
 function love.update(dt)
-    rotation = rotation + dt
+    x = x + dt
+    --rotation = rotation + dt
+    
+    if love.keyboard.isDown("a") then
+        for _, point in ipairs(points) do
+            point[1] = point[1] + dt * 6
+        end
+    elseif love.keyboard.isDown("d") then
+        for _, point in ipairs(points) do
+            point[1] = point[1] - dt * 6
+        end
+    elseif love.keyboard.isDown("w") then
+        for _, point in ipairs(points) do
+            point[2] = point[2] + dt * 6
+        end
+    elseif love.keyboard.isDown("s") then
+        for _, point in ipairs(points) do
+            point[2] = point[2] - dt * 6
+        end
+    elseif love.keyboard.isDown("up") then
+        for _, point in ipairs(points) do
+            point[3] = point[3] - dt * 6
+        end
+    elseif love.keyboard.isDown("down") then
+        for _, point in ipairs(points) do
+            point[3] = point[3] + dt * 6
+        end
+    end
+
+    
 end
 
 function love.draw()
     for _, vertex in ipairs(vertices) do
-        print(vertex[1], vertex[2])
         rotatedStart = RotateX(RotateY(points[vertex[1]]))
         rotatedEnd = RotateX(RotateY(points[vertex[2]]))
         start = Projection(rotatedStart)
         _end = Projection(rotatedEnd)
-
+        
         love.graphics.line(start[1], start[2], _end[1], _end[2])
     end
+    
+    love.graphics.print(love.timer.getFPS())
 end
